@@ -9,6 +9,33 @@ root_pass_slave = 'An0th3r_Pa%%w0rd!'
 # Debug message
 Chef::Log.error "\n\n" + '=' * 80 + "\n\nTesting MySQL version '#{node['mysql']['version']}'\n\n" + '=' * 80
 
+cmd = <<-EOH
+#!/bin/bash
+echo https://stackoverflow.com/a/37152673/1495086
+if ps -p1|grep -q init; then
+  echo "non-docker"
+else
+  echo "docker"
+fi
+
+echo https://stackoverflow.com/a/35751063/1495086
+grep -qa container=lxc /proc/1/environ
+
+echo https://stackoverflow.com/a/37016302/1495086
+cat /proc/1/sched | head -n 1
+
+echo https://stackoverflow.com/a/41559867/1495086
+if grep docker /proc/1/cgroup -qa; then
+   echo I am running in docker.
+else
+   echo I am not running in docker.
+fi
+EOH
+
+log_bash = Mixlib::ShellOut.new(cmd)
+log_bash.run_command
+Chef::Log.error "\n\n" + '=' * 80 + "\n\ndocker status: #{log_bash.stdout}\n\n" + '=' * 80
+
 # master
 mysql_service 'master' do
   port '3306'
