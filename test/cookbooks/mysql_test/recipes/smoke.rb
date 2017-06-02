@@ -36,6 +36,16 @@ log_bash = Mixlib::ShellOut.new(cmd)
 log_bash.run_command
 Chef::Log.error "\n\n" + '=' * 80 + "\n\ndocker status: #{log_bash.stdout}\n\n" + '=' * 80
 
+log_lsb = <<EOL
+ohai virutalization system: #{node['virtualization']['system']}, role: #{node['virtualization']['role']}
+lsb id: #{node['lsb']['id']}
+lsb description: #{node['lsb']['description']}
+lsb release: #{node['lsb']['release']}
+lsb release: #{node['lsb']['release']}
+lsb codename: #{node['lsb']['codename']}
+EOL
+Chef::Log.error "\n\n" + '=' * 80 + "\n\n#{log_lsb}\n\n" + '=' * 80
+
 # master
 mysql_service 'master' do
   port '3306'
