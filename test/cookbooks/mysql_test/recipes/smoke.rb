@@ -1,4 +1,5 @@
 require 'shellwords'
+include_recipe 'chef-sugar::default'
 
 apt_update 'update'
 
@@ -35,6 +36,7 @@ EOH
 log_bash = Mixlib::ShellOut.new(cmd)
 log_bash.run_command
 Chef::Log.error "\n\n" + '=' * 80 + "\n\ndocker status: #{log_bash.stdout}\n\n" + '=' * 80
+Chef::Log.error "\n\n" + '=' * 80 + "\n\ninit:#{('runit' if runit?) || ('upstart' if upstart?) || ('systemd' if systemd?)}\n\n" + '=' * 80
 
 log_lsb = <<EOL
 ohai virutalization system: #{node['virtualization']['system']}, role: #{node['virtualization']['role']}
